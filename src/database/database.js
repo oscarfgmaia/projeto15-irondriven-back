@@ -9,10 +9,10 @@ let db;
 
 try {
     await mongoCLient.connect();
-    console.log("Connected to database successfully.")
-    db = mongoCLient.db("ironDriven")
+    console.log("Connected to database successfully.");
+    db = mongoCLient.db("ironDriven");
 } catch (error) {
-    console.log(error)
+    console.log(error);
 }
 
 //collections to use
