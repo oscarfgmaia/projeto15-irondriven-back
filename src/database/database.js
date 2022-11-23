@@ -9,7 +9,7 @@ let db;
 
 try {
     await mongoCLient.connect();
-    console.log("Connected to database successfully.");
+    console.log("Connected to database successfully!");
     db = mongoCLient.db("ironDriven");
 } catch (error) {
     console.log(error);
