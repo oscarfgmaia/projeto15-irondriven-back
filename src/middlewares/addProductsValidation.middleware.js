@@ -7,6 +7,7 @@ export async function addProductsValidation(req, res, next) {
 
     if (error) {
         const errors = error.details.map((detail) => detail.message);
+        console.log(errors)
         return res.status(400).send(errors);
     }
     res.locals.product = product;
