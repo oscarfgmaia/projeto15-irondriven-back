@@ -19,6 +19,7 @@ try {
 export const usersCollection = db.collection("users");
 export const productsCollection = db.collection("products");
 export const sessionsCollection = db.collection("sessions");
+export const cartsCollection = db.collection("carts");
 
 export default db;
 
