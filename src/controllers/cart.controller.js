@@ -3,13 +3,18 @@ import { cartsCollection, sessionsCollection } from "../database/database.js";
 export async function addProductToUserCart(req, res) {
     const user = res.locals.user;
     const product = req.body;
+    console.log("INSERT PRODUCTS")
     try {
         if (!product) {
             return res.sendStatus(404);
         }
         const productWithPotencialBuyer = {
             userId: user._id,
-            ...product
+            name: product.name,
+            image: product.image,
+            price: product.price,
+            description: product.description,
+            category: product.category
         }
         await cartsCollection.insertOne(productWithPotencialBuyer)
         res.sendStatus(200)
