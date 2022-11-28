@@ -1,5 +1,5 @@
 import { usersCollection, sessionsCollection } from "../database/database.js";
-import { v4 as uuidV4 } from "uuid";
+import { v4 as uuid } from "uuid";
 
 import bcrypt from "bcrypt";
 
@@ -28,15 +28,30 @@ export async function signUp(req, res) {
 }
 
 export async function signIn(req, res) {
-    const user = res.locals.user;
-
-    const token = uuidV4();
-
     try {
-        await sessionsCollection.insertOne({ token, userId: user._id });
-        res.send({ token });
-    } catch (err) {
-        console.log(err);
+        let { email, password } = req.body;
+        email = email.toLowerCase();
+        const userExists = await usersCollection.findOne({ email })
+        if (!userExists) {
+            return res.status(404).send("email not registered");//not found
+        }
+        if (userExists && bcrypt.compareSync(password, userExists.password)) {
+            const token = uuid();
+            const isUserSessionExists = await sessionsCollection.findOne({ userId: userExists._id })
+            if (isUserSessionExists) {
+                await sessionsCollection.deleteOne({ _id: isUserSessionExists._id })
+            }
+            await sessionsCollection.insertOne({
+                userId: userExists._id,
+                token
+            })
+            res.send({ token })
+        } else {
+            return res.status(401).send("wrong password");//not found
+        }
+
+    } catch (error) {
+        console.log(error);
         res.sendStatus(500);
     }
 }
